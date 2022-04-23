@@ -6,7 +6,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const emptyCell = 0;
   let cells = [];
 
-  // Creating playing board cells
+  /**
+   * initializing Fn
+   */
+  (function init() {
+    createBoardCells();
+  })();
+
+  /**
+   * Creating playing board cells
+   * @returns {HTMLElement} Grid Cells of 16
+   */
   function createBoardCells() {
     for (let i = 0; i < gridCells; i++) {
       const cell = document.createElement('div');
@@ -16,9 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     generateRandomNumber();
   }
-  createBoardCells();
 
-  // Generating a number Randomly
+  /**
+   * Generating a number Randomly 2 (90%) or 4 (10%) in empty Cells
+   * @returns {Number} 2 or 4 in empty cell
+   */
   function generateRandomNumber() {
     let randomNumber = Math.floor(Math.random() * gridCells);
     if (+cells[randomNumber].innerHTML === emptyCell) {
@@ -32,7 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
     } else generateRandomNumber();
   }
 
-  // Move numbers to right
+  /**
+   * Move numbers to right
+   */
   function moveRight() {
     for (let i = 0; i < gridCells; i++) {
       // getting the Row and its values
@@ -57,7 +71,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Move numbers to left
+  /**
+   * Move numbers to left
+   */
   function moveLeft() {
     for (let i = 0; i < gridCells; i++) {
       // getting the Row and its values
@@ -82,7 +98,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Combing rows
+  /**
+   * Combing rows
+   */
   function combineRow() {
     for (let i = 0; i < gridCells - 1; i++) {
       if (cells[i].innerHTML === cells[i + 1].innerHTML) {
@@ -118,16 +136,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.addEventListener('keyup', handleKeyCode);
 
+  /**
+   * Handles moving to numbers to right
+   */
   function keyRight() {
     moveRight();
     combineRow();
     moveRight();
     generateRandomNumber();
   }
+
+  /**
+   * Handles moving to numbers to left
+   */
   function keyLeft() {
     moveLeft();
     combineRow();
     moveLeft();
     generateRandomNumber();
   }
+
+  /**
+   * Handles moving to numbers to up
+   */
+
+  /**
+   * Handles moving to numbers to down
+   */
 });
