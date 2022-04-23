@@ -7,6 +7,7 @@
     <title>2048</title>
     <link rel="icon" href="img/favicon.ico" />
     <link href="style.css" rel="stylesheet" />
+    <script src="script.js"></script>
   </head>
   <body>
     <main>
@@ -17,9 +18,11 @@
             <div class="scores-container">
               <div class="score">
                 <h2>SCORE</h2>
+                <p id="displayed_score">0</p>
               </div>
               <div class="best">
                 <h2>BEST</h2>
+                <p id="displayed_best_score">0</p>
               </div>
             </div>
           </div>
@@ -38,11 +41,10 @@
             </div>
           </div>
         </div>
-        <div class="game-table-container">
-          <div class="game-table-container-inner">
-            <div class="grid-container"></div>
-          </div>
-        </div>
+        <!-- <div class="game-table-container">
+          <div class="game-table-container-inner"></div>
+        </div> -->
+        <div class="grid-container"></div>
         <div class="game-explanation">
           <p class="how-to-play">
             <strong>HOW TO PLAY:</strong> Use your
@@ -53,6 +55,5 @@
         </div>
       </div>
     </main>
-    <script src="script.js"></script>
   </body>
 </html>
