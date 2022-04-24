@@ -45,9 +45,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /**
-   * Move numbers to right
+   * Move numbers to right or left
+   * @param {String} input
    */
-  function moveRight() {
+  function moveHorizontal(input) {
     for (let i = 0; i < gridCells; i++) {
       // getting the Row and its values
       if (i % 4 === 0) {
@@ -60,34 +61,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const rowWithValues = row.filter((num) => num);
         const numOfEmptyCellsInaRow = 4 - rowWithValues.length;
         const emptyCells = Array(numOfEmptyCellsInaRow).fill(emptyCell);
-        const newRow = emptyCells.concat(rowWithValues);
-
-        cells[i].innerHTML = newRow[0];
-        cells[i + 1].innerHTML = newRow[1];
-        cells[i + 2].innerHTML = newRow[2];
-        cells[i + 3].innerHTML = newRow[3];
-      }
-    }
-  }
-
-  /**
-   * Move numbers to left
-   */
-  function moveLeft() {
-    for (let i = 0; i < gridCells; i++) {
-      // getting the Row and its values
-      if (i % 4 === 0) {
-        const row = [
-          +cells[i].innerHTML,
-          +cells[i + 1].innerHTML,
-          +cells[i + 2].innerHTML,
-          +cells[i + 3].innerHTML,
-        ];
-
-        const rowWithValues = row.filter((num) => num);
-        const numOfEmptyCellsInaRow = 4 - rowWithValues.length;
-        const emptyCells = Array(numOfEmptyCellsInaRow).fill(emptyCell);
-        const newRow = rowWithValues.concat(emptyCells);
+        let newRow = [];
+        if (input === 'right') {
+          newRow = emptyCells.concat(rowWithValues);
+        } else {
+          newRow = rowWithValues.concat(emptyCells);
+        }
 
         cells[i].innerHTML = newRow[0];
         cells[i + 1].innerHTML = newRow[1];
@@ -141,9 +120,9 @@ document.addEventListener('DOMContentLoaded', () => {
    * Handles moving numbers to right
    */
   function keyRight() {
-    moveRight();
+    moveHorizontal('right');
     combineRow();
-    moveRight();
+    moveHorizontal('right');
     generateRandomNumber();
   }
 
@@ -151,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
    * Handles moving to numbers to left
    */
   function keyLeft() {
-    moveLeft();
+    moveHorizontal();
     combineRow();
     generateRandomNumber();
   }
