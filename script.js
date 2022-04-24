@@ -81,8 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   function combineRow() {
     for (let i = 0; i < gridCells - 1; i++) {
-      // if the cell is Zero, we return;
-      if (+cells[i.innerHTML === 0]) return;
       if (cells[i].innerHTML === cells[i + 1].innerHTML) {
         // Combining numbers to directional cell
         cells[i].innerHTML = +cells[i].innerHTML + +cells[i + 1].innerHTML;
