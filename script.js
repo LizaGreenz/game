@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const scoreDisplay = document.getElementById('displayed_score');
   const bestScoreDisplay = document.getElementById('displayed_best_score');
   const gridCells = 16;
-  const emptyCell = 0;
+  const emptyCell = '';
   let cells = [];
 
   /**
@@ -33,13 +33,21 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   function generateRandomNumber() {
     let randomNumber = Math.floor(Math.random() * gridCells);
-    if (+cells[randomNumber].innerHTML === emptyCell) {
+    if (cells[randomNumber].innerHTML === emptyCell) {
       // Generate 2 (90%) or 4 (10%)
       const cellValue = Math.floor(Math.random() * 10);
       if (cellValue >= 9) {
         cells[randomNumber].innerHTML = 4;
+        cells[randomNumber].classList.add('tile_animated');
+        setTimeout(() => {
+          cells[randomNumber].classList.remove('tile_animated');
+        }, 300);
       } else {
         cells[randomNumber].innerHTML = 2;
+        cells[randomNumber].classList.add('tile_animated');
+        setTimeout(() => {
+          cells[randomNumber].classList.remove('tile_animated');
+        }, 300);
       }
     } else generateRandomNumber();
   }
@@ -82,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function combineRow() {
     for (let i = 0; i < gridCells - 1; i++) {
       if (cells[i].innerHTML === cells[i + 1].innerHTML) {
+        // console.log(i + 1);
         // Combining numbers to directional cell
         cells[i].innerHTML = +cells[i].innerHTML + +cells[i + 1].innerHTML;
         // reset the other cell
@@ -130,6 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function keyLeft() {
     moveHorizontal();
     combineRow();
+    moveHorizontal();
     generateRandomNumber();
   }
 
