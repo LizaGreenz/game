@@ -35,8 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let randomNumber = Math.floor(Math.random() * gridCells);
     if (+cells[randomNumber].innerHTML === emptyCell) {
       // Generate 2 (90%) or 4 (10%)
-      const cellValue = Math.floor(Math.random() * 100);
-      if (cellValue >= 90) {
+      const cellValue = Math.floor(Math.random() * 10);
+      if (cellValue >= 9) {
         cells[randomNumber].innerHTML = 4;
       } else {
         cells[randomNumber].innerHTML = 2;
@@ -57,10 +57,9 @@ document.addEventListener('DOMContentLoaded', () => {
           +cells[i + 2].innerHTML,
           +cells[i + 3].innerHTML,
         ];
-
         const rowWithValues = row.filter((num) => num);
-        const emptyCellsInRow = 4 - rowWithValues.length;
-        const emptyCells = Array(emptyCellsInRow).fill(emptyCell);
+        const numOfEmptyCellsInaRow = 4 - rowWithValues.length;
+        const emptyCells = Array(numOfEmptyCellsInaRow).fill(emptyCell);
         const newRow = emptyCells.concat(rowWithValues);
 
         cells[i].innerHTML = newRow[0];
@@ -86,8 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
 
         const rowWithValues = row.filter((num) => num);
-        const emptyCellsInRow = 4 - rowWithValues.length;
-        const emptyCells = Array(emptyCellsInRow).fill(emptyCell);
+        const numOfEmptyCellsInaRow = 4 - rowWithValues.length;
+        const emptyCells = Array(numOfEmptyCellsInaRow).fill(emptyCell);
         const newRow = rowWithValues.concat(emptyCells);
 
         cells[i].innerHTML = newRow[0];
@@ -103,6 +102,8 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   function combineRow() {
     for (let i = 0; i < gridCells - 1; i++) {
+      // if the cell is Zero, we return;
+      if (+cells[i.innerHTML === 0]) return;
       if (cells[i].innerHTML === cells[i + 1].innerHTML) {
         // Combining numbers to directional cell
         cells[i].innerHTML = +cells[i].innerHTML + +cells[i + 1].innerHTML;
@@ -137,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('keyup', handleKeyCode);
 
   /**
-   * Handles moving to numbers to right
+   * Handles moving numbers to right
    */
   function keyRight() {
     moveRight();
@@ -152,7 +153,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function keyLeft() {
     moveLeft();
     combineRow();
-    moveLeft();
     generateRandomNumber();
   }
 
