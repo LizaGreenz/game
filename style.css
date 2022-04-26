@@ -1,13 +1,13 @@
 :root {
   --color-light-beige: #faf8ef;
   --color-light-beige-text: #f9f6f2;
-  --color-beige: #eee4da;
+  --color-beige: rgba(238, 228, 218, 0.35);
   --color-dark-beige: #bbada0;
   --color-brown-text: #776e65;
   --color-brown-button: #8f7a66;
   --color-light-yellow: #f0f069;
   font-size: 62.5%;
-  font-family: 'Clear Sans', sans-serif;
+  font-family: "Clear Sans", sans-serif;
 }
 
 html,
@@ -124,7 +124,7 @@ p {
   font-size: 1.8rem;
 }
 
-.game-table-container {
+/* .game-table-container {
   flex: 1;
   display: flex;
   align-items: center;
@@ -140,30 +140,47 @@ p {
   height: 540px;
   background-color: var(--color-dark-beige);
 }
+ */
 
 .grid-container {
-  display: flex;
-  flex-wrap: wrap;
-  width: 43rem;
-  height: 43rem;
+  display: grid;
+  grid-template-columns: repeat(var(--grid-size), var(--cell-size));
+  grid-template-rows: repeat(var(--grid-size), var(--cell-size));
   background-color: #bbada0;
-  gap: 1rem;
-  padding: 1rem;
+  gap: var(--cell-gap);
+  padding: var(--cell-gap);
+  border-radius: 6px;
+  height: fit-content;
+  position: relative;
+  width: fit-content;
 }
 
-.grid-container div {
+.cell {
+  border-radius: 3px;
+  background: rgba(238, 228, 218, 0.35);
+}
+
+.tile {
+  --x: 1;
+  --y: 2;
+  position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 4rem;
+  font-weight: bold;
+  color: var(--color-brown-text);
   width: 10rem;
   height: 10rem;
-  background-color: var(--color-light-yellow);
+  top: calc(var(--y) * (var(--cell-size) + var(--cell-gap)) + var(--cell-gap));
+  left: calc(var(--x) * (var(--cell-size) + var(--cell-gap)) + var(--cell-gap));
+  background: #eee4da;
+  border-radius: 3px;
   z-index: 2;
-  transition: all 0.3s;
+  transition: 100ms ease-in-out;
 }
+
 .tile_animated {
-  transition: all 0.3s;
   animation: spawn 0.3s forwards;
 }
 @keyframes spawn {
@@ -173,6 +190,59 @@ p {
   to {
     transform: scale(1);
   }
+}
+
+.tile-2 {
+  background: #eee4da;
+}
+
+.tile-4 {
+  background: #ede0c8;
+}
+
+.tile-8 {
+  color: #f9f6f2;
+  background: #f2b179;
+}
+
+.tile-16 {
+  color: #f9f6f2;
+  background: #f59563;
+}
+
+.tile-32 {
+  color: #f9f6f2;
+  background: #f67c5f;
+}
+
+.tile-64 {
+  color: #f9f6f2;
+  background: #f65e3b;
+}
+
+.tile-128 {
+  color: #f9f6f2;
+  background: #edcf73;
+}
+
+.tile-256 {
+  color: #f9f6f2;
+  background: #edcc62;
+}
+
+.tile-512 {
+  color: #f9f6f2;
+  background: #edc850;
+}
+
+.tile-1024 {
+  color: #f9f6f2;
+  background: #edc53f;
+}
+
+.tile-2048 {
+  color: #f9f6f2;
+  background: #edc22d;
 }
 
 @media (max-width: 1150px) {

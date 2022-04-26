@@ -1,9 +1,10 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const gameGridDisplay = document.querySelector('.grid-container');
-  const scoreDisplay = document.getElementById('displayed_score');
-  const bestScoreDisplay = document.getElementById('displayed_best_score');
+document.addEventListener("DOMContentLoaded", () => {
+  const gameGridDisplay = document.querySelector(".grid-container");
+  const scoreDisplay = document.getElementById("displayed_score");
+  const bestScoreDisplay = document.getElementById("displayed_best_score");
   const gridCells = 16;
-  const emptyCell = '';
+  const width = 4;
+  const emptyCell = "";
   let cells = [];
 
   /**
@@ -19,7 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   function createBoardCells() {
     for (let i = 0; i < gridCells; i++) {
-      const cell = document.createElement('div');
+      const cell = document.createElement("div");
+      cell.classList.add("cell");
       cell.innerHTML = emptyCell;
       gameGridDisplay.appendChild(cell);
       cells.push(cell);
@@ -38,15 +40,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const cellValue = Math.floor(Math.random() * 10);
       if (cellValue >= 9) {
         cells[randomNumber].innerHTML = 4;
-        cells[randomNumber].classList.add('tile_animated');
+        cells[randomNumber].classList.add("tile_animated");
         setTimeout(() => {
-          cells[randomNumber].classList.remove('tile_animated');
+          cells[randomNumber].classList.remove("tile_animated");
         }, 300);
       } else {
         cells[randomNumber].innerHTML = 2;
-        cells[randomNumber].classList.add('tile_animated');
+        cells[randomNumber].classList.add("tile_animated");
         setTimeout(() => {
-          cells[randomNumber].classList.remove('tile_animated');
+          cells[randomNumber].classList.remove("tile_animated");
         }, 300);
       }
     } else generateRandomNumber();
@@ -70,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const numOfEmptyCellsInaRow = 4 - rowWithValues.length;
         const emptyCells = Array(numOfEmptyCellsInaRow).fill(emptyCell);
         let newRow = [];
-        if (input === 'right') {
+        if (input === "right") {
           newRow = emptyCells.concat(rowWithValues);
         } else {
           newRow = rowWithValues.concat(emptyCells);
@@ -81,6 +83,32 @@ document.addEventListener('DOMContentLoaded', () => {
         cells[i + 2].innerHTML = newRow[2];
         cells[i + 3].innerHTML = newRow[3];
       }
+    }
+  }
+
+  function moveVertical(input) {
+    for (let i = 0; i < width; i++) {
+      // getting the Column and its values
+      const column = [
+        +cells[i].innerHTML,
+        +cells[i + width].innerHTML,
+        +cells[i + width * 2].innerHTML,
+        +cells[i + width * 3].innerHTML,
+      ];
+      const columnWithValues = column.filter((num) => num);
+      const numOfEmptyCellsInaColumn = 4 - columnWithValues.length;
+      const emptyCells = Array(numOfEmptyCellsInaColumn).fill(emptyCell);
+      let newColumn = [];
+      if (input === "down") {
+        newColumn = emptyCells.concat(columnWithValues);
+      } else {
+        newColumn = columnWithValues.concat(emptyCells);
+      }
+
+      cells[i].innerHTML = newColumn[0];
+      cells[i + width].innerHTML = newColumn[1];
+      cells[i + width * 2].innerHTML = newColumn[2];
+      cells[i + width * 3].innerHTML = newColumn[3];
     }
   }
 
@@ -99,6 +127,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function combineColumn() {
+    for (let i = 0; i < width * 3; i++) {
+      if (cells[i].innerHTML === cells[i + width].innerHTML) {
+        // Combining numbers to directional cell
+        cells[i].innerHTML = +cells[i].innerHTML + +cells[i + width].innerHTML;
+        // reset the other cell
+        cells[i + width].innerHTML = emptyCell;
+      }
+    }
+  }
+
   // key codes
   function handleKeyCode(e) {
     switch (e.keyCode) {
@@ -112,24 +151,24 @@ document.addEventListener('DOMContentLoaded', () => {
         break;
       // Key Up
       case 38:
-        // keyUp();
+        keyUp();
         break;
       // key Down
       case 40:
-        // keyDown();
+        keyDown();
         break;
     }
   }
 
-  document.addEventListener('keyup', handleKeyCode);
+  document.addEventListener("keyup", handleKeyCode);
 
   /**
    * Handles moving numbers to right
    */
   function keyRight() {
-    moveHorizontal('right');
+    moveHorizontal("right");
     combineRow();
-    moveHorizontal('right');
+    moveHorizontal("right");
     generateRandomNumber();
   }
 
@@ -146,8 +185,20 @@ document.addEventListener('DOMContentLoaded', () => {
   /**
    * Handles moving to numbers to up
    */
+  function keyUp() {
+    moveVertical();
+    combineColumn();
+    moveVertical();
+    generateRandomNumber();
+  }
 
   /**
    * Handles moving to numbers to down
    */
+  function keyDown() {
+    moveVertical("down");
+    combineColumn();
+    moveVertical("down");
+    generateRandomNumber();
+  }
 });
