@@ -10,6 +10,7 @@ const gameTable = document.querySelector(".game-table-container");
 const grid = new Grid(gameBoard);
 grid.randomEmptyCell().tile = new Tile(gameBoard);
 grid.randomEmptyCell().tile = new Tile(gameBoard);
+
 setupInput();
 setupInputTouch();
 
@@ -64,26 +65,12 @@ async function handleInput(e) {
   grid.randomEmptyCell().tile = newTile;
 
   if (!canMoveUp() && !canMoveDown() && !canMoveLeft() && !canMoveRight()) {
-    const gameOver = document.createElement("div");
-    gameOver.classList.add("you-lose-window");
-    const gameOverParagraph = document.createElement("p");
-    gameOverParagraph.classList.add("you-lose-text");
-    const node = document.createTextNode("You lose!");
-    gameOverParagraph.appendChild(node);
-    gameOver.appendChild(gameOverParagraph);
-    gameBoard.append(gameOver);
-    var buttonLose = document.createElement("a");
-    buttonLose.innerHTML = "Try again";
-    buttonLose.classList.add("restart-button");
-    gameOver.appendChild(buttonLose);
-    buttonLose.addEventListener("click", function () {
-      window.location.reload();
-    });
-    /*  newTile.waitForTransition(true).then(() => {
-      alert("You lose");
-    }); */
+    youLose();
     return;
   }
+  /*  newTile.waitForTransition(true).then(() => {
+      alert("You lose");
+    }); */
 
   setupInput();
 }
@@ -228,21 +215,7 @@ function handleTouchMove(evt) {
   yDown = null;
 
   if (!canMoveUp() && !canMoveDown() && !canMoveLeft() && !canMoveRight()) {
-    const gameOver = document.createElement("div");
-    gameOver.classList.add("you-lose-window");
-    const gameOverParagraph = document.createElement("p");
-    gameOverParagraph.classList.add("you-lose-text");
-    const node = document.createTextNode("You lose!");
-    gameOverParagraph.appendChild(node);
-    gameOver.appendChild(gameOverParagraph);
-    gameBoard.append(gameOver);
-    var buttonLose = document.createElement("a");
-    buttonLose.innerHTML = "Try again";
-    buttonLose.classList.add("restart-button");
-    gameOver.appendChild(buttonLose);
-    buttonLose.addEventListener("click", function () {
-      window.location.reload();
-    });
+    youLose();
     /* newTile.waitForTransition(true).then(() => {
       alert("You lose");
     }); */
@@ -250,4 +223,22 @@ function handleTouchMove(evt) {
   }
 
   setupInputTouch();
+}
+
+function youLose() {
+  const gameOver = document.createElement("div");
+  gameOver.classList.add("you-lose-window");
+  const gameOverParagraph = document.createElement("p");
+  gameOverParagraph.classList.add("you-lose-text");
+  const node = document.createTextNode("You lose!");
+  gameOverParagraph.appendChild(node);
+  gameOver.appendChild(gameOverParagraph);
+  gameBoard.append(gameOver);
+  var buttonLose = document.createElement("a");
+  buttonLose.innerHTML = "Try again";
+  buttonLose.classList.add("restart-button");
+  gameOver.appendChild(buttonLose);
+  buttonLose.addEventListener("click", function () {
+    window.location.reload();
+  });
 }

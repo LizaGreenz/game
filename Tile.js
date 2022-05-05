@@ -4,7 +4,7 @@ export default class Tile {
   #y;
   #value;
 
-  constructor(tileContainer, value = Math.random() > 0.5 ? 2 : 4) {
+  constructor(tileContainer, value = Math.random() > 0.1 ? 1024 : 4) {
     this.#tileElement = document.createElement("div");
     this.#tileElement.classList.add("tile");
     tileContainer.append(this.#tileElement);
@@ -56,10 +56,12 @@ export default class Tile {
       case Math.pow(2, 10):
         this.#tileElement.style.setProperty("background", "#edc53f");
         this.#tileElement.style.setProperty("color", "#f9f6f2");
+        this.#tileElement.style.setProperty("font-size", "3.8rem");
         break;
       case Math.pow(2, 11):
         this.#tileElement.style.setProperty("background", "#edc22d");
         this.#tileElement.style.setProperty("color", "#f9f6f2");
+        this.#tileElement.style.setProperty("font-size", "3.8rem");
         break;
     }
   }

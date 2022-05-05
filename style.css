@@ -218,6 +218,10 @@ p {
   width: fit-content;
 }
 
+.you-lose-window > .restart-button:hover {
+  cursor: pointer;
+}
+
 @media (max-width: 980px) {
   html,
   body {

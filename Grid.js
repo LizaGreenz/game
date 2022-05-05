@@ -1,6 +1,8 @@
 const GRID_SIZE = 4;
 const CELL_SIZE = 10;
 const CELL_GAP = 1.5;
+const gameBoard = document.querySelector(".grid-container");
+const gameTable = document.querySelector(".game-table-container");
 
 export default class Grid {
   constructor(gridElement) {
@@ -76,16 +78,19 @@ class Cell {
 
   canAccept(tile) {
     return (
-      this.tile == null ||
-      (this.mergeTile == null && this.tile.value === tile.value)
+      this.#tile == null ||
+      (this.#mergeTile == null && this.#tile.value === tile.value)
     );
   }
 
   mergeTiles() {
-    if (this.tile == null || this.mergeTile == null) return;
-    this.tile.value = this.tile.value + this.mergeTile.value;
-    this.mergeTile.remove();
-    this.mergeTile = null;
+    if (this.#tile == null || this.mergeTile == null) return;
+    this.#tile.value = this.tile.value + this.mergeTile.value;
+    if (this.#tile.value === 2048) {
+      youWin();
+    }
+    this.#mergeTile.remove();
+    this.#mergeTile = null;
   }
 }
 
@@ -98,4 +103,22 @@ function createCellElements(gridElement) {
     gridElement.append(cell);
   }
   return cells;
+}
+
+function youWin() {
+  const gameOver = document.createElement("div");
+  gameOver.classList.add("you-lose-window");
+  const gameOverParagraph = document.createElement("p");
+  gameOverParagraph.classList.add("you-lose-text");
+  const node = document.createTextNode("You win!");
+  gameOverParagraph.appendChild(node);
+  gameOver.appendChild(gameOverParagraph);
+  gameBoard.append(gameOver);
+  var buttonLose = document.createElement("a");
+  buttonLose.innerHTML = "New Game";
+  buttonLose.classList.add("restart-button");
+  gameOver.appendChild(buttonLose);
+  buttonLose.addEventListener("click", function () {
+    window.location.reload();
+  });
 }
