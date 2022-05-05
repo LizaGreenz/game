@@ -1,6 +1,11 @@
 import Grid from "./Grid.js";
 import Tile from "./Tile.js";
 
+const distanceThreshold = 60;
+
+let pDownX = null;
+let pDownY = null;
+
 var xDown = null;
 var yDown = null;
 
@@ -12,15 +17,15 @@ grid.randomEmptyCell().tile = new Tile(gameBoard);
 grid.randomEmptyCell().tile = new Tile(gameBoard);
 
 setupInput();
-setupInputTouch();
+setupPointerInput();
 
 function setupInput() {
   window.addEventListener("keydown", handleInput, { once: true });
 }
 
-function setupInputTouch() {
-  window.addEventListener("touchstart", handleTouchStart, false);
-  window.addEventListener("touchmove", handleTouchMove, false);
+function setupPointerInput() {
+  gameBoard.addEventListener("pointerdown", handlePointerDown, false);
+  gameBoard.addEventListener("pointermove", handlePointerMove, false);
 }
 
 async function handleInput(e) {
@@ -147,42 +152,35 @@ function canMove(cells) {
   });
 }
 
-function getTouches(evt) {
-  return (
-    evt.touches || // browser API
-    evt.originalEvent.touches
-  ); // jQuery
+function handlePointerDown(evt) {
+  pDownX = evt.clientX;
+  pDownY = evt.clientY;
+  console.log(pDownX, pDownY);
 }
 
-function handleTouchStart(evt) {
-  const firstTouch = getTouches(evt)[0];
-  xDown = firstTouch.clientX;
-  yDown = firstTouch.clientY;
-}
-
-function handleTouchMove(evt) {
-  if (!xDown || !yDown) {
+function handlePointerMove(evt) {
+  if (!pDownX || !pDownY) {
     return;
   }
 
-  var xUp = evt.touches[0].clientX;
-  var yUp = evt.touches[0].clientY;
+  var xUp = evt.clientX;
+  var yUp = evt.clientY;
 
-  var xDiff = xDown - xUp;
-  var yDiff = yDown - yUp;
+  var xDiff = pDownX - xUp;
+  var yDiff = pDownY - yUp;
 
   if (Math.abs(xDiff) > Math.abs(yDiff)) {
     /*most significant*/
     if (xDiff > 0) {
       if (!canMoveLeft()) {
-        setupInputTouch();
+        setupPointerInput();
         return;
       }
       moveLeft();
       /* right swipe */
     } else {
       if (!canMoveRight()) {
-        setupInputTouch();
+        setupPointerInput();
         return;
       }
       moveRight();
@@ -191,14 +189,14 @@ function handleTouchMove(evt) {
   } else {
     if (yDiff > 0) {
       if (!canMoveUp()) {
-        setupInputTouch();
+        setupPointerInput();
         return;
       }
       moveUp();
       /* down swipe */
     } else {
       if (!canMoveDown()) {
-        setupInputTouch();
+        setupPointerInput();
         return;
       }
       moveDown();
@@ -211,8 +209,8 @@ function handleTouchMove(evt) {
   const newTile = new Tile(gameBoard);
   grid.randomEmptyCell().tile = newTile;
 
-  xDown = null;
-  yDown = null;
+  pDownX = null;
+  pDownY = null;
 
   if (!canMoveUp() && !canMoveDown() && !canMoveLeft() && !canMoveRight()) {
     youLose();
@@ -221,8 +219,6 @@ function handleTouchMove(evt) {
     }); */
     return;
   }
-
-  setupInputTouch();
 }
 
 function youLose() {
