@@ -1,16 +1,14 @@
 import Grid from "./Grid.js";
 import Tile from "./Tile.js";
 
-const distanceThreshold = 60;
-
 let pDownX = null;
 let pDownY = null;
-
-var xDown = null;
-var yDown = null;
+Grid.score;
 
 const gameBoard = document.querySelector(".grid-container");
 const gameTable = document.querySelector(".game-table-container");
+const scoreDisplay = document.getElementById("displayed_score");
+const bestScoreDisplay = document.getElementById("displayed_best_score");
 
 const grid = new Grid(gameBoard);
 grid.randomEmptyCell().tile = new Tile(gameBoard);
@@ -155,7 +153,6 @@ function canMove(cells) {
 function handlePointerDown(evt) {
   pDownX = evt.clientX;
   pDownY = evt.clientY;
-  console.log(pDownX, pDownY);
 }
 
 function handlePointerMove(evt) {
@@ -236,5 +233,6 @@ function youLose() {
   gameOver.appendChild(buttonLose);
   buttonLose.addEventListener("click", function () {
     window.location.reload();
+    scoreDisplay.innerHTML = "0";
   });
 }

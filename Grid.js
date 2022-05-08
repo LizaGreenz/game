@@ -3,19 +3,27 @@ const CELL_SIZE = 10;
 const CELL_GAP = 1.5;
 const gameBoard = document.querySelector(".grid-container");
 const gameTable = document.querySelector(".game-table-container");
+const scoreDisplay = document.getElementById("displayed_score");
+var score = 0;
 
 export default class Grid {
+  #cells;
+
   constructor(gridElement) {
     gridElement.style.setProperty("--grid-size", GRID_SIZE);
     gridElement.style.setProperty("--cell-size", `${CELL_SIZE}rem`);
     gridElement.style.setProperty("--cell-gap", `${CELL_GAP}rem`);
-    this.cells = createCellElements(gridElement).map((cellElement, index) => {
+    this.#cells = createCellElements(gridElement).map((cellElement, index) => {
       return new Cell(
         cellElement,
         index % GRID_SIZE,
         Math.floor(index / GRID_SIZE)
       );
     });
+  }
+
+  get cells() {
+    return this.#cells;
   }
 
   get cellsByRow() {
@@ -86,9 +94,10 @@ class Cell {
   mergeTiles() {
     if (this.#tile == null || this.mergeTile == null) return;
     this.#tile.value = this.tile.value + this.mergeTile.value;
-    if (this.#tile.value === 2048) {
+    if (this.#tile.value == 2048) {
       youWin();
     }
+    countScore(this.#tile.value);
     this.#mergeTile.remove();
     this.#mergeTile = null;
   }
@@ -105,6 +114,12 @@ function createCellElements(gridElement) {
   return cells;
 }
 
+function countScore(num) {
+  score += num;
+  scoreDisplay.innerHTML = score;
+  return score;
+}
+
 function youWin() {
   const gameOver = document.createElement("div");
   gameOver.classList.add("you-lose-window");
@@ -119,6 +134,7 @@ function youWin() {
   buttonLose.classList.add("restart-button");
   gameOver.appendChild(buttonLose);
   buttonLose.addEventListener("click", function () {
+    scoreDisplay.innerHTML = "0";
     window.location.reload();
   });
 }
