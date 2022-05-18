@@ -4,8 +4,9 @@ const CELL_GAP = 1.5;
 const gameBoard = document.querySelector(".grid-container");
 const gameTable = document.querySelector(".game-table-container");
 const scoreDisplay = document.getElementById("displayed_score");
+const bestScoreDisplay = document.getElementById("displayed_best_score");
+const timeDisplay = document.getElementById("displayed_time_score");
 var score = 0;
-
 export default class Grid {
   #cells;
 
@@ -96,8 +97,14 @@ class Cell {
     this.#tile.value = this.tile.value + this.mergeTile.value;
     if (this.#tile.value == 2048) {
       youWin();
+      gameBoard.removeEventListener("pointerdown", handlePointerDown, false);
+      window.removeEventListener("keydown", handleInput, { once: true });
     }
-    countScore(this.#tile.value);
+    let score = countScore(this.#tile.value);
+    if (score > +bestScoreDisplay.innerHTML) {
+      bestScoreDisplay.innerHTML = score;
+    }
+
     this.#mergeTile.remove();
     this.#mergeTile = null;
   }
@@ -122,19 +129,24 @@ function countScore(num) {
 
 function youWin() {
   const gameOver = document.createElement("div");
-  gameOver.classList.add("you-lose-window");
+  gameOver.classList.add("you-lose-or-win-window");
   const gameOverParagraph = document.createElement("p");
-  gameOverParagraph.classList.add("you-lose-text");
+  gameOverParagraph.classList.add("you-lose-or-win-text");
   const node = document.createTextNode("You win!");
   gameOverParagraph.appendChild(node);
   gameOver.appendChild(gameOverParagraph);
   gameBoard.append(gameOver);
+  const timeSpent = document.createElement("p");
+  const timeSpentText = document.createTextNode(timeDisplay.innerHTML);
+  timeSpent.appendChild(timeSpentText);
+  timeSpent.classList.add("time-spent-text");
+  gameOver.appendChild(timeSpent);
   var buttonLose = document.createElement("a");
   buttonLose.innerHTML = "New Game";
   buttonLose.classList.add("restart-button");
   gameOver.appendChild(buttonLose);
   buttonLose.addEventListener("click", function () {
-    scoreDisplay.innerHTML = "0";
     window.location.reload();
+    scoreDisplay.innerHTML = "0";
   });
 }

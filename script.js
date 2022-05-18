@@ -1,14 +1,17 @@
 import Grid from "./Grid.js";
 import Tile from "./Tile.js";
 
+var seconds = 0;
+
 let pDownX = null;
 let pDownY = null;
-Grid.score;
 
 const gameBoard = document.querySelector(".grid-container");
 const gameTable = document.querySelector(".game-table-container");
 const scoreDisplay = document.getElementById("displayed_score");
 const bestScoreDisplay = document.getElementById("displayed_best_score");
+const timeDisplay = document.getElementById("displayed_time_score");
+const newGameButton = document.querySelector(".restart-button");
 
 const grid = new Grid(gameBoard);
 grid.randomEmptyCell().tile = new Tile(gameBoard);
@@ -16,6 +19,15 @@ grid.randomEmptyCell().tile = new Tile(gameBoard);
 
 setupInput();
 setupPointerInput();
+setInterval(incrementSeconds, 1000);
+
+window.onload = () => {
+  if (localStorage.getItem("bestScore") == null) {
+    bestScoreDisplay.innerHTML = 0;
+  } else {
+    bestScoreDisplay.innerHTML = localStorage.getItem("bestScore");
+  }
+};
 
 function setupInput() {
   window.addEventListener("keydown", handleInput, { once: true });
@@ -25,6 +37,11 @@ function setupPointerInput() {
   gameBoard.addEventListener("pointerdown", handlePointerDown, false);
   gameBoard.addEventListener("pointermove", handlePointerMove, false);
 }
+
+newGameButton.addEventListener("click", function () {
+  localStorage.setItem("bestScore", scoreDisplay.innerHTML);
+  window.location.reload();
+});
 
 async function handleInput(e) {
   switch (e.key) {
@@ -69,11 +86,10 @@ async function handleInput(e) {
 
   if (!canMoveUp() && !canMoveDown() && !canMoveLeft() && !canMoveRight()) {
     youLose();
+    gameBoard.removeEventListener("pointerdown", handlePointerDown, false);
+    window.removeEventListener("keydown", handleInput, { once: true });
     return;
   }
-  /*  newTile.waitForTransition(true).then(() => {
-      alert("You lose");
-    }); */
 
   setupInput();
 }
@@ -211,18 +227,17 @@ function handlePointerMove(evt) {
 
   if (!canMoveUp() && !canMoveDown() && !canMoveLeft() && !canMoveRight()) {
     youLose();
-    /* newTile.waitForTransition(true).then(() => {
-      alert("You lose");
-    }); */
+    gameBoard.removeEventListener("pointerdown", handlePointerDown, false);
+    window.removeEventListener("keydown", handleInput, { once: true });
     return;
   }
 }
 
 function youLose() {
   const gameOver = document.createElement("div");
-  gameOver.classList.add("you-lose-window");
+  gameOver.classList.add("you-lose-or-win-window");
   const gameOverParagraph = document.createElement("p");
-  gameOverParagraph.classList.add("you-lose-text");
+  gameOverParagraph.classList.add("you-lose-or-win-text");
   const node = document.createTextNode("You lose!");
   gameOverParagraph.appendChild(node);
   gameOver.appendChild(gameOverParagraph);
@@ -232,7 +247,12 @@ function youLose() {
   buttonLose.classList.add("restart-button");
   gameOver.appendChild(buttonLose);
   buttonLose.addEventListener("click", function () {
+    localStorage.setItem("bestScore", scoreDisplay.innerHTML);
     window.location.reload();
-    scoreDisplay.innerHTML = "0";
   });
+}
+
+function incrementSeconds() {
+  seconds += 1;
+  timeDisplay.innerHTML = seconds;
 }

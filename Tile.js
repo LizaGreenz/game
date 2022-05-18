@@ -3,8 +3,9 @@ export default class Tile {
   #x;
   #y;
   #value;
+  query;
 
-  constructor(tileContainer, value = Math.random() > 0.1 ? 2 : 4) {
+  constructor(tileContainer, value = Math.random() > 0.1 ? 1024 : 4) {
     this.#tileElement = document.createElement("div");
     this.#tileElement.classList.add("tile");
     tileContainer.append(this.#tileElement);
@@ -18,6 +19,8 @@ export default class Tile {
   set value(v) {
     this.#value = v;
     this.#tileElement.textContent = v;
+    this.query = window.matchMedia("(max-width: 550px)");
+
     switch (v) {
       case Math.pow(2, 1):
         this.#tileElement.style.setProperty("background", "#eee4da");
@@ -56,12 +59,41 @@ export default class Tile {
       case Math.pow(2, 10):
         this.#tileElement.style.setProperty("background", "#edc53f");
         this.#tileElement.style.setProperty("color", "#f9f6f2");
-        this.#tileElement.style.setProperty("font-size", "3.8rem");
+        if (this.query.matches) {
+          this.#tileElement.style.setProperty("font-size", "calc(4rem / 1.7)");
+        } else {
+          this.#tileElement.style.setProperty("font-size", "3.8rem");
+        }
+        this.query.onchange = (e) => {
+          if (e.matches) {
+            this.#tileElement.style.setProperty(
+              "font-size",
+              "calc(4rem / 1.7)"
+            );
+          } else {
+            this.#tileElement.style.setProperty("font-size", "3.8rem");
+          }
+        };
         break;
       case Math.pow(2, 11):
         this.#tileElement.style.setProperty("background", "#edc22d");
         this.#tileElement.style.setProperty("color", "#f9f6f2");
         this.#tileElement.style.setProperty("font-size", "3.8rem");
+        if (this.query.matches) {
+          this.#tileElement.style.setProperty("font-size", "calc(4rem / 1.7)");
+        } else {
+          this.#tileElement.style.setProperty("font-size", "3.8rem");
+        }
+        this.query.onchange = (e) => {
+          if (e.matches) {
+            this.#tileElement.style.setProperty(
+              "font-size",
+              "calc(4rem / 1.7)"
+            );
+          } else {
+            this.#tileElement.style.setProperty("font-size", "3.8rem");
+          }
+        };
         break;
     }
   }
