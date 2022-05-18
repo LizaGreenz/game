@@ -237,7 +237,7 @@ function youLose() {
   const gameOver = document.createElement("div");
   gameOver.classList.add("you-lose-or-win-window");
   const gameOverParagraph = document.createElement("p");
-  gameOverParagraph.classList.add("you-lose-or-win-text");
+  gameOverParagraph.classList.add("you-lose-text");
   const node = document.createTextNode("You lose!");
   gameOverParagraph.appendChild(node);
   gameOver.appendChild(gameOverParagraph);

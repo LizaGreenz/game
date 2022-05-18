@@ -209,11 +209,19 @@ p {
   z-index: 3;
 }
 
-.you-lose-or-win-text {
+.you-win-text {
   font-size: 6rem;
   font-weight: bold;
   text-align: center;
   margin-top: 8rem;
+  margin-bottom: 4rem;
+}
+
+.you-lose-text {
+  font-size: 6rem;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 13rem;
   margin-bottom: 4rem;
 }
 
@@ -339,8 +347,15 @@ p {
         calc(var(--cell-gap) / 1.7)
     );
   }
+  .you-lose-text {
+    font-size: 4rem;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 8rem;
+    margin-bottom: 2rem;
+  }
 
-  .you-lose-or-win-text {
+  .you-win-text {
     font-size: 4rem;
     font-weight: bold;
     text-align: center;
