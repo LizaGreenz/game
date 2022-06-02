@@ -1,5 +1,6 @@
 import Grid from "./Grid.js";
 import Tile from "./Tile.js";
+import { gameStart } from "./Grid.js";
 
 var seconds = 0;
 
@@ -19,7 +20,7 @@ grid.randomEmptyCell().tile = new Tile(gameBoard);
 
 setupInput();
 setupPointerInput();
-setInterval(incrementSeconds, 1000);
+var timeScore = setInterval(incrementSeconds, 1000);
 
 window.onload = () => {
   if (localStorage.getItem("bestScore") == null) {
@@ -84,10 +85,15 @@ async function handleInput(e) {
   const newTile = new Tile(gameBoard);
   grid.randomEmptyCell().tile = newTile;
 
+  if (gameStart == false) {
+    gameBoard.removeEventListener("pointerdown", handlePointerDown);
+    gameBoard.removeEventListener("pointermove", handlePointerMove);
+    window.removeEventListener("keydown", handleInput);
+    clearInterval(timeScore);
+  }
+
   if (!canMoveUp() && !canMoveDown() && !canMoveLeft() && !canMoveRight()) {
     youLose();
-    gameBoard.removeEventListener("pointerdown", handlePointerDown, false);
-    window.removeEventListener("keydown", handleInput, { once: true });
     return;
   }
 
@@ -225,10 +231,15 @@ function handlePointerMove(evt) {
   pDownX = null;
   pDownY = null;
 
+  if (gameStart == false) {
+    gameBoard.removeEventListener("pointerdown", handlePointerDown);
+    gameBoard.removeEventListener("pointermove", handlePointerMove);
+    window.removeEventListener("keydown", handleInput);
+    clearInterval(timeScore);
+  }
+
   if (!canMoveUp() && !canMoveDown() && !canMoveLeft() && !canMoveRight()) {
     youLose();
-    gameBoard.removeEventListener("pointerdown", handlePointerDown, false);
-    window.removeEventListener("keydown", handleInput, { once: true });
     return;
   }
 }
@@ -246,6 +257,7 @@ function youLose() {
   buttonLose.innerHTML = "Try again";
   buttonLose.classList.add("restart-button");
   gameOver.appendChild(buttonLose);
+  clearInterval(timeScore);
   buttonLose.addEventListener("click", function () {
     localStorage.setItem("bestScore", scoreDisplay.innerHTML);
     window.location.reload();
